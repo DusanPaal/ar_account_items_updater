@@ -1,6 +1,6 @@
 version: 1
 disable_existing_loggers: True
-retain_logs_days: 30
+retain_logs_days: 30 # number of days to keep logs
 
 formatters:
   report:
