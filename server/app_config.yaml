@@ -1,0 +1,20 @@
+sap:
+  system: P25
+
+data:
+  fbl3n_layout: TEXT_UPDATER
+  fbl5n_layout: TEXT_UPDATER
+  report_name: report.xlsx
+  sheet_name: Data
+
+messages:
+  requests:
+    account: lbs.robot@ledvance.com
+    mailbox: lbs.robot@ledvance.com
+    server: outlook.office365.com
+  notifications:
+    send: True
+    sender: notifications@ledvance.com
+    subject: AR Account Items Text Updater
+    host: intrelay.ledvance.com
+    port: 25

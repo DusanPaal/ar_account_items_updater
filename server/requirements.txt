@@ -1,0 +1,8 @@
+exchangelib==4.7.6
+openpyxl==3.0.10
+pandas==1.4.4
+psutil==5.9.1
+pyperclip==1.8.2
+pywin32==304
+PyYAML==6.0
+XlsxWriter==3.0.3
