@@ -1,9 +1,9 @@
 """
 Description:
 ------------
-The controller.py represents the middle layer of the application design \n
-and mediates communication between the top layer (app.py) and the \n
-highly specialized modules situated on the bottom layer of the design \n
+The controller.py represents the middle layer of the application design
+and mediates communication between the top layer (app.py) and the
+highly specialized modules situated on the bottom layer of the design
 (fbl3n.py, fbl5n.py, mails.py, report.py sap.py).
 
 Version history:
@@ -109,19 +109,21 @@ def _remove_old_logs(logger: Logger, log_dir: str, n_days: int) -> None:
 				logger.error(str(exc))
 
 def configure_logger(log_dir: str, cfg_path: str, *header: str) -> None:
-	"""Configures application logging system.
+	"""Configures the application's logging system.
 
 	Parameters:
 	-----------
 	log_dir:
-		Path to the directory to store the log file.
+		The path to the directory where 
+	    the log file will be stored.
 
 	cfg_path:
-		Path to a yaml/yml file that contains
-		application configuration parameters.
+		The path to a YAML/YML file containing 
+		the application’s configuration parameters
 
 	header:
-		A sequence of lines to print into the log header.
+		A sequence of lines to be printed  
+		into the log header.
 	"""
 
 	log_path = _compile_log_path(log_dir)
@@ -139,18 +141,20 @@ def configure_logger(log_dir: str, cfg_path: str, *header: str) -> None:
 # ====================================
 
 def load_app_config(cfg_path: str) -> dict:
-	"""Reads application configuration
-	parameters from a file.
+	"""Reads application configuration 
+	parameters from a YAML/YML file.
 
 	Parameters:
 	-----------
 	cfg_path:
-		Path to a yaml/yml file that contains
-		application configuration parameters.
+		The path to the YAML/YML file 
+		containing the application's 
+		configuration parameters
 
 	Returns:
 	--------
-	Application configuration parameters.
+	A dictionary containing the application 
+	configuration parameters.
 	"""
 
 	log.info("Loading application configuration ...")
@@ -172,7 +176,8 @@ def load_app_config(cfg_path: str) -> dict:
 # ====================================
 
 def _generate_processing_input(data: DataFrame) -> dict:
-	"""Creates processing input for FBLxN form the user data."""
+	"""Creates processing input for 
+   FBL3N/FBL5N form the user data."""
 
 	result = {}
 
@@ -242,38 +247,43 @@ def _convert_user_data(att_data: bytes) -> DataFrame:
 	return data
 
 def get_user_input(msg_cfg: dict, email_id: str) -> dict:
-	"""Fetches the processing parameters and data provided by the user.
+	"""Retrieves the processing parameters and data provided by the user.
 
-	If the user message is no longer available
-	(e.g. it gets accidentally deleted), then
-	a `RuntimeError` exception is raised.
+	If the user message is no longer available (e.g. it gets accidentally
+	deleted), then a `RuntimeError` exception is raised.
 
-	If the proessing parameters are not found in the
-	user message or the user provides incorrect values,
-	then `ValueError` exception is raised.
+	If the proessing parameters are not found in the user message or 
+	the user provides incorrect values, then `ValueError` exception is raised.
 
 	Parameters:
 	-----------
 	msg_cfg:
-		Application 'messages' configuration parameters.
+		Configuration parameters for application messages.
 
 	email_id:
-		The string ID of the message.
+		The string ID associated with the message.
 
 	Returns:
 	--------
-	Names of the processing parameters and their values:
-	- "error_message": A detailed error message if an exception occurs.
-	- "email": Email address of the sender.
-	- "company_code": Company code provided by the sender.
-	- "data": An pandas.DataFrame object containing converted attachment data.
-	- "account_type": Type of the accounts:
-		- "customer": The accounts contained in data are customer accounts.
-		- "general_ledger": The accounts contained in data are G/L accounts.
-	- "attachment": {
-		"name": attachments[0]["name"],
-		"content": converted
-	}
+	A dictionary of the processing parameters and their values:
+		- "error_message": `str`
+			A detailed error message if an exception occurs.
+		- "email": `str`
+			Email address of the sender.
+		- "company_code": `str`
+			Company code provided by the sender.
+		- "data": pandas.DataFrame
+			A DataFrame containing the converted attachment data.
+		- "account_type": `str`
+			Type of the accounts:
+				- "customer": The accounts contained in the data are customer accounts.
+				- "general_ledger": The accounts contained in the data are G/L accounts.
+		- "attachment": `dict`
+			Details of the attachment: 
+				- "name": `str`
+					The name of the attachment.
+				- "content": `any`
+					The content of the attachment before conversion. 
 	"""
 
 	log.info("Retrieving user message ...")
@@ -362,16 +372,17 @@ def get_user_input(msg_cfg: dict, email_id: str) -> dict:
 # ====================================
 
 def connect_to_sap(system: str) -> CDispatch:
-	"""Creates connection to the SAP GUI scripting engine.
+	"""Establishes a connection to the SAP GUI scripting engine.
 
 	Parameters:
 	-----------
 	system:
-		The SAP system to use for connecting to the scripting engine.
+		The SAP system to connect to using the scripting engine.
 
 	Returns:
 	--------
-	A SAP `GuiSession` object that represents active user session.
+	An SAP `GuiSession` object (wrapped in the `win32:CDispatch class`)
+	representing the active SAP GUI session.
 	"""
 
 	log.info("Connecting to SAP ...")
@@ -381,13 +392,13 @@ def connect_to_sap(system: str) -> CDispatch:
 	return sess
 
 def disconnect_from_sap(sess: CDispatch) -> None:
-	"""Closes connection to the SAP GUI scripting engine.
+	"""Closes the connection to the SAP GUI scripting engine.
 
 	Parameters:
 	-----------
 	sess:
-		An SAP `GuiSession` object (wrapped in the `win32:CDispatch` class)
-		that represents an active user SAP GUI session.
+		An SAP `GuiSession` object (wrapped in the `win32:CDispatch class`)
+		representing the active SAP GUI session.
 	"""
 
 	log.info("Disconnecting from SAP ...")
@@ -400,39 +411,41 @@ def disconnect_from_sap(sess: CDispatch) -> None:
 # ====================================
 
 def modify_accounting_parameters(
-		sess: CDispatch, data: DataFrame,
-		acc_type: str, cocd: str, data_cfg: dict
+		sess: CDispatch,
+		data: DataFrame,
+		acc_type: str,
+		cocd: str, 
+		data_cfg: dict
 	) -> dict:
-	"""Modifies accounting item parameters in FBL3N/FBL5N \n
-	transaction according to the data supplied by the user:
-	- the 'Text' field: Applicable to any account.
-	- the 'Assignment' field: Only accounts supporting the specified field
+	"""Modifies accounting item parameters in FBL3N/FBL5N based on 
+	user-supplied data. Currently, only the 'Text' and 'Assignment' fields
+	can be modified. 
 
 	Parameters:
 	-----------
 	sess:
-		An SAP `GuiSession` object (wrapped in the `win32:CDispatch` class) \n
-		that represents an active user SAP GUI session.
+		An SAP `GuiSession` object (wrapped in the `win32:CDispatch` class)
+		representing an active user SAP GUI session.
 
 	data:
-		Message attachment data.
+		The message attachment data in a pandas DataFrame.
 
 	acc_type:
-		Type of the processed accounts.
+		The type of accounts being processed (e.g., "customer" or "general_ledger").
 
 	cocd:
-		Company code of the processed accounts.
+		The company code associated with the accounts being processed.
 
 	data_cfg:
-		Application 'data' configuration params.
+		Configuration parameters for handling the data.
 
 	Returns:
 	--------
-	- "data": `pandas.DataFrame`
-		The original user data and the processing
-		tatus stored in its 'message' field.
-	- "error_message": `str`
-		Error message if an exception occurs, otherwise `None`.
+	A dictionary containing the following keys and values:
+		- “data”: `pandas.DataFrame`
+			The original user data and the processing status stored in its 'message' field.
+		- “error_message”: `str`, `None`
+			  An error message if an exception occurs, otherwise None.
 	"""
 
 	if data.empty:
@@ -492,18 +505,19 @@ def modify_accounting_parameters(
 # ====================================
 
 def create_report(temp_dir: str, data_cfg: dict, data: DataFrame) -> str:
-	"""Creates user report from the processing outcome.
+	"""Generates a user report based on the processing outcome.
 
 	Parameters:
 	-----------
 	temp_dir:
-		Path to the directory where temporary files are stored.
+		The path to the directory where temporary files are stored.
 
 	data_cfg:
-		Application 'data' configuration params.
+		Configuration parameters for handling the data.
 
 	data:
-		The processing outcome from which report will be generated.
+		The data containing the processing outcome 
+		from which the report will be generated.
 
 	Returns:
 	--------
@@ -524,26 +538,26 @@ def send_notification(
 		attachment: Union[dict, str] = None, # type: ignore
 		error_msg: str = ""
 	) -> None:
-	"""Sends a notification with processing result to the user.
+	"""Sends a notification with the processing result to the user.
 
 	Parameters:
 	-----------
 	msg_cfg:
-		Application 'messages' configuration parameters.
-
-	template_dir:
-		Path to the application directory
-		that contains notification templates.
+		Configuration parameters for application messages.
 
 	user_mail:
-		Email address of the user who requested processing.
+		The email address of the user who requested processing.
+
+	template_dir:
+		The path to the directory containing notification templates.
 
 	attachment:
-		Attachment name and data or a file path.
+		Either a dictionary containing attachment name  
+		and data, or a file path to the attachment.
 
 	error_msg:
-		Error message that will be included in the user notification.
-		By default, no erro message is included.
+		An error message to include in the notification.
+		Default is an empty string (no error message).
 	"""
 
 	log.info("Sending notification to user ...")
@@ -603,12 +617,12 @@ def send_notification(
 # ====================================
 
 def delete_temp_files(temp_dir: str) -> None:
-	"""Removes all temporary files.
+	"""Removes all temporary files from the specified directory.
 
 	Parameters:
 	-----------
 	temp_dir:
-		Path to the directory where temporary files are stored.
+		The path to the directory where temporary files are stored.
 	"""
 
 	file_paths = glob(join(temp_dir, "*.*"))

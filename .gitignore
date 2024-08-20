@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+*.eddx
+*.png
+/doc/.~lock.Documentation_v1.0.docx#
+/doc/Documentation_v1.0.docx
