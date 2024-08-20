@@ -21,10 +21,6 @@ from win32ui import error as WinError
 
 FilePath = str
 
-DEFAULT_EXE_PATH: str = r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe"
-
-system_code: str = ""
-
 _systems = {
 	"P25": "OG ERP: P25 Productive SSO",
 	"Q25": "OG ERP: Q25 Quality Assurance SSO"
@@ -63,10 +59,8 @@ def connect(system: str, exe: FilePath="") -> CDispatch:
 	# SAP should always be installed to the same directory for all users
 	# If a specific path is used, then the default path is overridden.
 
-	global system_code
-
-	exe_path = DEFAULT_EXE_PATH if exe == "" else exe
-	system_code = system
+	default_exe = r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe"
+	exe_path = default_exe if exe == "" else exe 
 
 	if not isfile(exe_path):
 		raise FileNotFoundError(
