@@ -45,8 +45,8 @@ def connect(system: str, exe: FilePath="") -> CDispatch:
 	exe:
 		Path to the local SAP GUI executable.
 
-		If the path is not specified, then the default local SAP
-		installation directory is searched for the executable file. \n
+		If the specified path is not specified, then the default local 
+		SAP installation directory is searched for the executable file.
 		If the executable is not found, then a `FileNotFoundError`
 		exception is raised.
 

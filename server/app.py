@@ -90,16 +90,20 @@ def main(args: dict) -> int:
 		controller.delete_temp_files(temp_dir)
 		log.info("=== Cleanup END ===\n")
 		return 2
-
+	  
 	if user_input["error_message"] is not None:
 		log.error(user_input["error_message"])
 		controller.send_notification(
 			cfg["messages"], user_input["email"], template_dir,
 			error_msg = user_input["error_message"])
-		return 0
+		log.info("=== Cleanup START ===")
+		controller.disconnect_from_sap(sess)
+		controller.delete_temp_files(temp_dir)
+		log.info("=== Cleanup END ===\n")
+		return 2
 
 	log.info("=== Processing START ===")
-
+	 
 	try:
 		output = controller.modify_accounting_parameters(
 			sess, user_input["data"],
@@ -113,7 +117,7 @@ def main(args: dict) -> int:
 		controller.disconnect_from_sap(sess)
 		controller.delete_temp_files(temp_dir)
 		log.info("=== Cleanup END ===\n")
-		return 3
+		return 3 
 
 	if output["error_message"] is not None:
 		log.warning(output["error_message"])
@@ -125,11 +129,11 @@ def main(args: dict) -> int:
 		controller.disconnect_from_sap(sess)
 		controller.delete_temp_files(temp_dir)
 		log.info("=== Cleanup END ===\n")
-		return 0
+		return 3 
 
 	log.info("=== Processing END ===\n")
 
-	try:
+	try: 
 		log.info("=== Reporting START ===")
 		report_path = controller.create_report(temp_dir, cfg["data"], output["data"])
 		controller.send_notification(
@@ -141,8 +145,8 @@ def main(args: dict) -> int:
 		return 4
 	finally:
 		log.info("=== Cleanup START ===")
-		controller.delete_temp_files(temp_dir)
 		controller.disconnect_from_sap(sess)
+		controller.delete_temp_files(temp_dir)
 		log.info("=== Cleanup END ===\n")
 
 	return 0
