@@ -17,9 +17,8 @@ class FolderNotFoundError(Exception):
 	"""
 
 def _get_col_width(vals: Series, col_name: str, add_width: int = 0) -> int:
-	"""
-	Returns an integer representing the width of a column calculated \n
-	as the maximum number of characters contained in column name and \n
+	"""Returns an integer representing the width of a column calculated
+	as the maximum number of characters contained in column name and
 	column values plus additional points provided with the 'add_width'
 	argument (default 0 points).
 	"""
@@ -40,10 +39,9 @@ def _col_to_rng(
 		row: int = -1,
 		last_row: int = -1
 	) -> str:
-	"""
-	Converts data position in a DataFrame object into excel range notation (e.g. 'A1:D1', 'B2:G2'). \n
-	If 'last_col' is None, then only single-column range will be generated (e.g. 'A:A', 'B1:B1'). \n
-	If 'row' is '-1', then the generated range will span all the column(s) rows (e.g. 'A:A', 'E:E'). \n
+	"""Converts data position in a DataFrame object into excel range notation (e.g. 'A1:D1', 'B2:G2').
+	If 'last_col' is None, then only single-column range will be generated (e.g. 'A:A', 'B1:B1').
+	If 'row' is '-1', then the generated range will span all the column(s) rows (e.g. 'A:A', 'E:E').
 	If 'last_row' is provided, then the generated range will include all data records up to the last
 	row (including).
 
@@ -121,24 +119,26 @@ def _col_to_rng(
 	return rng
 
 def generate_excel_report(file: FilePath, data: DataFrame, sht_name: str) -> None:
-	"""Creates an excel report from the processing outcome.
+	"""Generates an excel report from the processing outcome.
 
 	Parameters:
 	-----------
 	file:
-		Path to the .xlsx report file to create.
+		The path where the XLSX report file will be created.
 
 	data:
-		The processing outcome containing records to write.
+		The DataFrame containing the processing 
+		outcome that will be written to the report.
 
 	sht_name:
-		Name of the report sheet.
+		The name of the sheet in the Excel
+		report where the data will be written.
 	"""
 
 	dst_dir = dirname(file)
 
 	if not file.lower().endswith(".xlsx"):
-		raise ValueError(f"TUnsupported report file format: '{file}'")
+		raise ValueError(f"Unsupported report file format: '{file}'")
 
 	if not exists(dst_dir):
 		raise FolderNotFoundError(f"Destination folder not found: {dst_dir}")
